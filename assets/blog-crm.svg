@@ -1,0 +1,36 @@
+
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-crm" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#142055"></stop>
+      <stop offset="55%" stop-color="#26307a"></stop>
+      <stop offset="100%" stop-color="#0e1843"></stop>
+    </linearGradient>
+    <radialGradient id="glow-crm" cx="70%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.75"></stop>
+      <stop offset="60%" stop-color="#818cf8" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="glow2-crm" cx="20%" cy="85%" r="70%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.55"></stop>
+      <stop offset="60%" stop-color="#a78bfa" stop-opacity="0"></stop>
+    </radialGradient>
+    <pattern id="grid-crm" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"></path>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg-crm)"></rect>
+  <rect width="800" height="500" fill="url(#grid-crm)"></rect>
+  <rect width="800" height="500" fill="url(#glow-crm)"></rect>
+  <rect width="800" height="500" fill="url(#glow2-crm)"></rect>
+  <g>
+    <rect x="160" y="170" width="120" height="200" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)"></rect>
+    <rect x="340" y="170" width="120" height="200" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)"></rect>
+    <rect x="520" y="170" width="120" height="200" rx="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)"></rect>
+    <rect x="175" y="190" width="90" height="32" rx="4" fill="rgba(34,211,238,0.7)"></rect>
+    <rect x="175" y="232" width="90" height="32" rx="4" fill="rgba(129,140,248,0.55)"></rect>
+    <rect x="355" y="190" width="90" height="32" rx="4" fill="rgba(129,140,248,0.7)"></rect>
+    <rect x="355" y="232" width="90" height="32" rx="4" fill="rgba(167,139,250,0.6)"></rect>
+    <rect x="355" y="274" width="90" height="32" rx="4" fill="rgba(167,139,250,0.45)"></rect>
+    <rect x="535" y="190" width="90" height="32" rx="4" fill="rgba(52,211,153,0.7)"></rect>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-security" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c1a3a"></stop>
+      <stop offset="55%" stop-color="#1a3650"></stop>
+      <stop offset="100%" stop-color="#0a1430"></stop>
+    </linearGradient>
+    <radialGradient id="glow-security" cx="70%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.75"></stop>
+      <stop offset="60%" stop-color="#22d3ee" stop-opacity="0"></stop>
+    </radialGradient>
+    <radialGradient id="glow2-security" cx="20%" cy="85%" r="70%">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.55"></stop>
+      <stop offset="60%" stop-color="#34d399" stop-opacity="0"></stop>
+    </radialGradient>
+    <pattern id="grid-security" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"></path>
+    </pattern>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg-security)"></rect>
+  <rect width="800" height="500" fill="url(#grid-security)"></rect>
+  <rect width="800" height="500" fill="url(#glow-security)"></rect>
+  <rect width="800" height="500" fill="url(#glow2-security)"></rect>
+  <g>
+    <path d="M 400 100 L 540 160 L 540 280 Q 540 380 400 430 Q 260 380 260 280 L 260 160 Z" fill="rgba(34,211,238,0.18)" stroke="rgba(34,211,238,0.7)" stroke-width="3"></path>
+    <rect x="370" y="240" width="60" height="60" rx="6" fill="rgba(255,255,255,0.9)"></rect>
+    <path d="M 380 240 L 380 220 Q 380 195 400 195 Q 420 195 420 220 L 420 240" stroke="rgba(255,255,255,0.9)" stroke-width="6" fill="none"></path>
+    <circle cx="400" cy="270" r="5" fill="#0a1430"></circle>
+  </g>
+</svg>
