@@ -1,0 +1,260 @@
+/* ============================================================
+   VIRTUAL KEYS — GLOBAL MOTION LAYER
+   Cinematic slow-mo page transitions, scroll reveals,
+   and card / button hover motion. Loaded on every page.
+   ============================================================ */
+
+/* Match html bg to page bg so no white can ever flash through */
+html { background:#04050d; }
+
+/* ------------------------------------------------------------
+   PAGE-LOAD VEIL  (cinematic curtain-raise on every load)
+   ------------------------------------------------------------ */
+@keyframes vkVeilOut {
+  0%   { opacity:1; }
+  100% { opacity:0; }
+}
+
+html::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:2147483646;        /* sits on top of everything */
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 50%, #070918 0%, #04050d 70%);
+  opacity:1;
+  animation:vkVeilOut 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+  will-change:opacity;
+}
+
+/* When leaving the page (link clicked), fade the veil back in */
+html.vk-leaving::before {
+  animation:none;
+  opacity:1;
+  transition:opacity 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Freeze the page so it can't be re-clicked mid-transition */
+html.vk-leaving body { pointer-events:none; }
+
+/* Subtle content-lift on enter — drifts up gently as veil fades.
+   Uses only opacity (no transform/filter on body that could
+   break fixed-position background children).                 */
+@keyframes vkBodyEnter {
+  0%   { opacity:0.85; }
+  100% { opacity:1;    }
+}
+body {
+  animation:vkBodyEnter 1.0s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+}
+
+/* ------------------------------------------------------------
+   SCROLL REVEAL — slowed for a true slow-mo cinematic feel
+   ------------------------------------------------------------ */
+.reveal {
+  transition:
+    opacity   1.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.6s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+.reveal:not(.in) {
+  /* Slightly larger travel for a more dramatic rise */
+  transform:translateY(42px);
+}
+.reveal.in {
+  transform:translateY(0);
+}
+
+/* Sideways reveals (already in solutions.html) — slow them too */
+.reveal-from-left,
+.reveal-from-right {
+  transition:
+    opacity   1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* ------------------------------------------------------------
+   CARDS — universal smooth hover lift across all pages
+   NOTE: .imm-card and .home-pillar are intentionally EXCLUDED here
+   because they have their own rich tilt / hover transforms in
+   the page's inline CSS / JS that we don't want to flatten.
+   ------------------------------------------------------------ */
+.post-card,
+.testi-card,
+.founder-card,
+.featured-post,
+.benefit,
+.phase,
+.af,
+.fl-stats,
+.cta-banner,
+.kpi,
+.proof-item {
+  transition:
+    transform     0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow    0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color  0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    background    0.7s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change:transform;
+}
+
+/* Slow lift on hover */
+.post-card:hover,
+.testi-card:hover,
+.featured-post:hover,
+.benefit:hover,
+.phase:hover,
+.af:hover {
+  transform:translateY(-8px) scale(1.012);
+  box-shadow:
+    0 30px 60px -22px rgba(0, 0, 0, 0.55),
+    0 14px 32px -12px rgba(34, 211, 238, 0.18),
+    inset 0 0 0 1px rgba(160, 180, 240, 0.18);
+}
+
+/* ------------------------------------------------------------
+   IMMERSIVE FLIP CARDS — fix the flip on solutions & academy.
+   The page's inline CSS has rules like:
+     .reveal-from-right.in   { transform: translate3d(0,0,0) }
+     .reveal-row.in          { transform: translate3d(0,0,0) scale(1) }
+     .reveal.in              { transform: translateY(0) }
+   These appear LATER in source order than .imm-card.is-flipped,
+   so they were overriding the flip transform and the back face
+   never showed. Forcing the flip with !important wins cleanly.
+
+   Also: KEEP perspective(1200px) during the flip. The original
+   CSS only sets perspective on :not(.is-flipped), so the flipped
+   state lost depth — this makes iOS Safari flatten the 3D
+   context and breaks backface-visibility:hidden.
+   ------------------------------------------------------------ */
+.imm-card.is-flipped,
+.imm-card.is-flipped.reveal,
+.imm-card.is-flipped.reveal.in,
+.imm-card.is-flipped.reveal-from-right.in,
+.imm-card.is-flipped.reveal-from-left.in,
+.imm-card.is-flipped.reveal-row.in {
+  transform: perspective(1200px) rotateY(180deg) !important;
+}
+
+/* ------------------------------------------------------------
+   iOS SAFARI BACKFACE FIX
+   On real iPhones, backface-visibility:hidden can fail when
+   the parent uses transform-style:preserve-3d + the children
+   have overflow:hidden + border-radius. The front face bleeds
+   through behind the back face, MIRRORED — that's the reversed
+   text bug.
+
+   The fix: cross-fade the two faces with opacity, timed to
+   happen at the midpoint of the 0.9s flip (when the card is
+   edge-on and effectively invisible anyway). Even if Safari
+   ignores backface-visibility, the wrong face is at opacity:0
+   so nothing leaks through.
+
+   Works on every browser, invisible to the eye, no JS needed.
+   ------------------------------------------------------------ */
+.imm-card .imm-face {
+  /* preserve the existing border-color / box-shadow transitions
+     and add opacity with a delay so the swap happens mid-flip */
+  transition:
+    border-color 0.4s ease,
+    box-shadow   0.4s ease,
+    opacity      0.32s ease 0.34s !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.imm-card .imm-back            { opacity: 0; }
+.imm-card.is-flipped .imm-face:not(.imm-back) { opacity: 0; }
+.imm-card.is-flipped .imm-back { opacity: 1; }
+
+/* Card images — smooth zoom on hover */
+.post-card,
+.featured-post,
+.home-pillar-image { overflow:hidden; }
+
+.post-card img,
+.featured-post img,
+.home-pillar-image img,
+.featured-media img {
+  transition:transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  will-change:transform;
+}
+.post-card:hover img,
+.featured-post:hover img,
+.home-pillar:hover .home-pillar-image img {
+  transform:scale(1.045);
+}
+
+/* ------------------------------------------------------------
+   BUTTONS — silky press / hover motion
+   ------------------------------------------------------------ */
+.btn,
+.btn-primary,
+.btn-ghost,
+.nav-cta,
+.btn-bookcall,
+.btn-calendly {
+  transition:
+    transform     0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background    0.45s ease,
+    border-color  0.45s ease,
+    box-shadow    0.45s ease,
+    color         0.45s ease !important;
+  will-change:transform;
+}
+.btn:hover,
+.btn-primary:hover,
+.btn-ghost:hover,
+.nav-cta:hover,
+.btn-bookcall:hover,
+.btn-calendly:hover {
+  transform:translateY(-2px);
+}
+.btn:active,
+.btn-primary:active,
+.btn-ghost:active,
+.nav-cta:active,
+.btn-bookcall:active,
+.btn-calendly:active {
+  transform:translateY(0) scale(0.985);
+  transition-duration:0.12s !important;
+}
+
+/* Smooth nav-link / footer hovers */
+.nav-links a,
+.nav-link,
+.footer-socials a,
+.footer-flags a {
+  transition:color 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+.nav-links a:hover,
+.nav-link:hover { transform:translateY(-1px); }
+
+/* ------------------------------------------------------------
+   ACCESSIBILITY — kill motion if the user has it disabled
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html::before {
+    animation:none !important;
+    opacity:0 !important;
+    transition:none !important;
+  }
+  html.vk-leaving::before {
+    transition:none !important;
+    opacity:0 !important;
+  }
+  body { animation:none !important; }
+  .reveal,
+  .reveal-from-left,
+  .reveal-from-right,
+  .post-card, .testi-card, .founder-card,
+  .home-pillar, .featured-post, .benefit, .phase, .af,
+  .fl-stats, .cta-banner, .kpi, .proof-item,
+  .btn, .btn-primary, .btn-ghost, .nav-cta {
+    transition:none !important;
+    animation:none !important;
+    transform:none !important;
+  }
+  /* .imm-card kept flippable — kill the timing but allow state changes */
+  .imm-card { transition:none !important; animation:none !important; }
+  .reveal { opacity:1 !important; }
+}
